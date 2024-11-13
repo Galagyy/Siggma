@@ -31,7 +31,7 @@ public class App {
         try {
             DiscordApi api = new DiscordApiBuilder()
                     .setToken(token)
-                    .setAllNonPrivilegedIntents()
+                    .setAllIntents()
                     .login().join();
 
             this.commandHandler = new CommandHandler(this.prefix);
