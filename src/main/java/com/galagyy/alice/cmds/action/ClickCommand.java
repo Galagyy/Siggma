@@ -32,7 +32,8 @@ public class ClickCommand implements ICommand {
                 if(args[2] != null && args[3] != null){
                     setPosition(Integer.parseInt(args[2]), Integer.parseInt(args[3]));
                 } else {
-                    event.getChannel().sendMessage("You must provide more fields.");
+                    log.warn("Not enough fields were provided for the set command.");
+                    event.getChannel().sendMessage("You must provide more fields: click set <x> <y>");
                 }
 
                 break;
@@ -48,7 +49,7 @@ public class ClickCommand implements ICommand {
                 event.getChannel().sendMessage("The position has been reset to it's default settings.");
                 break;
 
-            case "click":
+            default:
                 int prevX = this.x;
                 int prevY = this.y;
 
@@ -60,11 +61,9 @@ public class ClickCommand implements ICommand {
                     this.x = prevX;
                     this.y = prevY;
                 } else {
-                    log.error("You must provide more fields.");
-                    event.getChannel().sendMessage("You must provide more fields.");
+                    click();
                 }
-                break;
-            default:
+
                 click();
         }
     }
@@ -85,7 +84,7 @@ public class ClickCommand implements ICommand {
 
             return true;
         } else {
-            log.error("Invalid position provided, ({}, {})", this.x, this.y);
+            log.warn("Invalid position provided, ({}, {})", this.x, this.y);
         }
 
         return false;

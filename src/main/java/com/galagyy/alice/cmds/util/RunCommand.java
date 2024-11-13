@@ -16,7 +16,7 @@ public class RunCommand implements ICommand {
     @Override
     public void run(MessageCreateEvent event, String args[]) {
         if(args.length <= 1){
-            log.error("Not enough fields provided.");
+            log.error("You must provide more fields.");
             event.getChannel().sendMessage("You must provide more fields: `run <command>`");
             return;
         }

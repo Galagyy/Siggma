@@ -14,7 +14,7 @@ public class TypeCommand implements ICommand {
     @Override
     public void run(MessageCreateEvent event, String[] args) {
         if(args[1] == null){
-            log.error("You did not provide a keyboard stream.");
+            log.warn("You did not provide a keyboard stream.");
             event.getChannel().sendMessage("You did not provide a keyboard stream.");
             return;
         }
@@ -34,7 +34,7 @@ public class TypeCommand implements ICommand {
                 if (ch == 'h' && stream.startsWith("hold(", i)) {
                     int endIdx = stream.indexOf(")", i);
                     if (endIdx == -1) {
-                        log.error("Invalid hold syntax.");
+                        log.warn("Invalid hold syntax.");
                         return;
                     }
 
@@ -73,7 +73,7 @@ public class TypeCommand implements ICommand {
             try {
                 Thread.sleep(seconds * 1000L);
             } catch (InterruptedException e) {
-                log.error("Interrupted while holding key: " + ch);
+                log.error("Interrupted while holding key: {}", ch);
             }
 
             robot.keyRelease(keyCode);
