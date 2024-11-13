@@ -36,14 +36,34 @@ public class ClickCommand implements ICommand {
                 }
 
                 break;
+
             case "get":
                 event.getChannel().sendMessage("The current position is (" + this.x + ", " + this.y + ").");
                 break;
+
             case "reset":
                 this.x = MAX_WIDTH / 2;
                 this.y = MAX_HEIGHT / 2;
 
                 event.getChannel().sendMessage("The position has been reset to it's default settings.");
+                break;
+
+            case "click":
+                int prevX = this.x;
+                int prevY = this.y;
+
+                if(args[2] != null && args[3] != null){
+                    if(setPosition(Integer.parseInt(args[2]), Integer.parseInt(args[3]))){
+                        click();
+                    }
+
+                    this.x = prevX;
+                    this.y = prevY;
+                } else {
+                    log.error("You must provide more fields.");
+                    event.getChannel().sendMessage("You must provide more fields.");
+                }
+                break;
             default:
                 click();
         }
@@ -58,12 +78,16 @@ public class ClickCommand implements ICommand {
         }
     }
 
-    private void setPosition(int x, int y){
+    private boolean setPosition(int x, int y){
         if(this.x <= MAX_WIDTH && this.y <= MAX_HEIGHT && this.x >= 0 && this.y >= 0){
             this.x = x;
             this.y = y;
+
+            return true;
         } else {
             log.error("Invalid position provided, ({}, {})", this.x, this.y);
         }
+
+        return false;
     }
 }
