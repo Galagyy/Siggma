@@ -1,4 +1,4 @@
-package com.galagyy.util;
+package com.galagyy.alice.util;
 
 import java.util.Scanner;
 

@@ -1,4 +1,4 @@
-package com.galagyy.util;
+package com.galagyy.alice.util;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,12 +18,14 @@ public class FileManager {
 
     public FileManager(String configLocation){
         this.configLocation = configLocation;
+        this.config = new HashMap<>();
 
         loadConfiguration();
     }
 
     public FileManager(){
         this.configLocation = "./config.txt";
+        this.config = new HashMap<>();
 
         loadConfiguration();
     }
@@ -34,6 +36,8 @@ public class FileManager {
 
     public void setValue(String key, String value){
         config.put(key, value);
+
+        writeConfiguration();
     }
 
     public boolean configExists(){
@@ -62,11 +66,5 @@ public class FileManager {
         } catch (Exception exception){
             log.error(exception.getMessage());
         }
-    }
-
-    private boolean validateFile(String location){
-        File configLocation = new File(location);
-
-        return configLocation.exists() && !configLocation.isDirectory();
     }
 }
