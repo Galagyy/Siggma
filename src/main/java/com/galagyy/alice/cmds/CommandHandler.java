@@ -1,5 +1,6 @@
 package com.galagyy.alice.cmds;
 
+import com.galagyy.alice.cmds.action.ClickCommand;
 import com.galagyy.alice.cmds.info.PingCommand;
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,6 +46,7 @@ public class CommandHandler {
         this.commands = new HashMap<>();
 
         commands.put("ping", new PingCommand());
+        commands.put("click", new ClickCommand());
     }
 
     private String[] extractCommand(MessageCreateEvent event){
