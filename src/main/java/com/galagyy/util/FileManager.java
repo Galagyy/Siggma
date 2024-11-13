@@ -2,50 +2,66 @@ package com.galagyy.util;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import java.util.HashMap;
 
 @Slf4j
 public class FileManager {
-    private String configLocation = "";
+    private final String configLocation;
     private HashMap<String, String> config;
 
     public FileManager(String configLocation){
         this.configLocation = configLocation;
 
-        loadConfiguration(configLocation);
+        loadConfiguration();
     }
 
     public FileManager(){
         this.configLocation = "./config.txt";
 
-        loadConfiguration(configLocation);
+        loadConfiguration();
     }
 
     public String getValue(String key){
         return config.get(key);
     }
 
-    private void loadConfiguration(String configLocation){
-        File configFile = new File(configLocation);
+    public void setValue(String key, String value){
+        config.put(key, value);
+    }
 
-        if(validateFile(configLocation)){
-            try(BufferedReader reader = new BufferedReader(new FileReader(configLocation))){
-                String line = reader.readLine();
+    public boolean configExists(){
+        return new File(this.configLocation).exists();
+    }
 
-                while(line != null){
-                    String[] split = line.split(":");
+    private void loadConfiguration(){
+        try (FileInputStream fileInputStream = new FileInputStream(this.configLocation)){
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 
-                    this.config.put(split[0], split[1]);
-                    line = reader.readLine();
-                }
-            } catch (Exception exception){
-                // TODO: Implement logger.
-            }
+            this.config = (HashMap<String, String>) objectInputStream.readObject();
+
+            objectInputStream.close();
+        } catch (Exception exception){
+            log.error(exception.getMessage());
         }
+    }
 
+    private void writeConfiguration(){
+        try (FileOutputStream fileOutputStream = new FileOutputStream(this.configLocation)){
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            objectOutputStream.writeObject(config);
+
+            objectOutputStream.flush();
+            objectOutputStream.close();
+        } catch (Exception exception){
+            log.error(exception.getMessage());
+        }
     }
 
     private boolean validateFile(String location){
