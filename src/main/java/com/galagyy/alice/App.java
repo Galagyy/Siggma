@@ -1,11 +1,11 @@
-package com.galagyy;
+package com.galagyy.alice;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.galagyy.cmds.CommandHandler;
+import com.galagyy.alice.cmds.CommandHandler;
 
-import com.galagyy.util.FileManager;
-import com.galagyy.util.InputManager;
+import com.galagyy.alice.util.FileManager;
+import com.galagyy.alice.util.InputManager;
 
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
@@ -15,6 +15,7 @@ public class App {
     private CommandHandler commandHandler;
 
     private String token;
+    private String prefix;
 
     public static void main(String[] args){
         App mainApp = new App();
@@ -33,7 +34,7 @@ public class App {
                     .setAllNonPrivilegedIntents()
                     .login().join();
 
-            this.commandHandler = new CommandHandler();
+            this.commandHandler = new CommandHandler(this.prefix);
 
             api.addMessageCreateListener(event -> {
                 this.commandHandler.handleCommand(event);
@@ -50,13 +51,18 @@ public class App {
 
         if(fileManager.configExists()){
             this.token = fileManager.getValue("token");
+            this.prefix = fileManager.getValue("prefix");
             log.info("Retrieved token from config file.");
 
             return;
         }
 
-        this.token = inputManager.prompt("Please enter the token:");
+        this.token = inputManager.prompt("Please enter the token: ");
+        this.prefix = inputManager.prompt("Please enter the prefix: ");
+
         fileManager.setValue("token", this.token);
+        fileManager.setValue("prefix", this.prefix);
+
         log.info("Retrieved token from user input.");
     }
 }
