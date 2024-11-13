@@ -1,7 +1,9 @@
 package com.galagyy.alice.cmds;
 
 import com.galagyy.alice.cmds.action.ClickCommand;
+import com.galagyy.alice.cmds.action.TypeCommand;
 import com.galagyy.alice.cmds.info.PingCommand;
+import com.galagyy.alice.cmds.util.RunCommand;
 import lombok.extern.slf4j.Slf4j;
 
 import org.javacord.api.event.message.MessageCreateEvent;
@@ -47,6 +49,8 @@ public class CommandHandler {
 
         commands.put("ping", new PingCommand());
         commands.put("click", new ClickCommand());
+        commands.put("run", new RunCommand());
+        commands.put("type", new TypeCommand());
     }
 
     private String[] extractCommand(MessageCreateEvent event){
