@@ -2,27 +2,17 @@ package com.galagyy.alice.cmds.action;
 
 import com.galagyy.alice.cmds.ICommand;
 
+import com.galagyy.alice.service.ClickService;
 import lombok.extern.slf4j.Slf4j;
 
 import org.javacord.api.event.message.MessageCreateEvent;
 
-import java.awt.Toolkit;
-import java.awt.Robot;
-
 @Slf4j
 public class ClickCommand implements ICommand {
-    private final int MAX_WIDTH;
-    private final int MAX_HEIGHT;
+    private final ClickService clickService;
 
-    private int x;
-    private int y;
-
-    public ClickCommand() {
-        this.MAX_HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height;
-        this.MAX_WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width;
-
-        this.x = MAX_WIDTH / 2;
-        this.y = MAX_HEIGHT / 2;
+    public ClickCommand(ClickService clickService) {
+        this.clickService = clickService;
     }
 
     @Override
@@ -30,7 +20,7 @@ public class ClickCommand implements ICommand {
         switch (args[1]) {
             case "set":
                 if(args[2] != null && args[3] != null){
-                    setPosition(Integer.parseInt(args[2]), Integer.parseInt(args[3]));
+                    clickService.set(Integer.parseInt(args[2]), Integer.parseInt(args[3]));
                 } else {
                     log.warn("Not enough fields were provided for the set command.");
                     event.getChannel().sendMessage("You must provide more fields: click set <x> <y>");
@@ -39,54 +29,22 @@ public class ClickCommand implements ICommand {
                 break;
 
             case "get":
-                event.getChannel().sendMessage("The current position is (" + this.x + ", " + this.y + ").");
+                event.getChannel().sendMessage("The current position is (" + clickService.getX() + ", " + clickService.getY() + ").");
                 break;
 
             case "reset":
-                this.x = MAX_WIDTH / 2;
-                this.y = MAX_HEIGHT / 2;
+                clickService.reset();
 
                 event.getChannel().sendMessage("The position has been reset to it's default settings.");
                 break;
 
             default:
-                int prevX = this.x;
-                int prevY = this.y;
-
                 if(args[2] != null && args[3] != null){
-                    if(setPosition(Integer.parseInt(args[2]), Integer.parseInt(args[3]))){
-                        click();
-                    }
-
-                    this.x = prevX;
-                    this.y = prevY;
-                } else {
-                    click();
+                    clickService.click(Integer.parseInt(args[2]), Integer.parseInt(args[3]));
+                    return;
                 }
 
-                click();
+                clickService.click();
         }
-    }
-
-    private void click(){
-        try {
-            Robot robot = new Robot();
-            robot.mouseMove(this.x, this.y);
-        } catch (Exception exception) {
-            log.error(exception.getMessage());
-        }
-    }
-
-    private boolean setPosition(int x, int y){
-        if(this.x <= MAX_WIDTH && this.y <= MAX_HEIGHT && this.x >= 0 && this.y >= 0){
-            this.x = x;
-            this.y = y;
-
-            return true;
-        } else {
-            log.warn("Invalid position provided, ({}, {})", this.x, this.y);
-        }
-
-        return false;
     }
 }
