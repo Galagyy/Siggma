@@ -19,13 +19,13 @@ public class CommandHandler {
     public CommandHandler(String prefix) {
         this.prefix = prefix;
 
-        loadCommands();
+        this.commands = new HashMap<>();
     }
 
     public CommandHandler(){
         this.prefix = "!";
 
-        loadCommands();
+        this.commands = new HashMap<>();
     }
 
     public void handleCommand(MessageCreateEvent event){
@@ -44,13 +44,8 @@ public class CommandHandler {
         }
     }
 
-    private void loadCommands(){
-        this.commands = new HashMap<>();
-
-        commands.put("ping", new PingCommand());
-        commands.put("click", new ClickCommand());
-        commands.put("run", new RunCommand());
-        commands.put("type", new TypeCommand());
+    public void registerCommand(String prefix, ICommand command){
+        commands.put(prefix, command);
     }
 
     private String[] extractCommand(MessageCreateEvent event){

@@ -1,5 +1,7 @@
 package com.galagyy.alice;
 
+import com.galagyy.alice.cmds.action.ClickCommand;
+import com.galagyy.alice.cmds.info.PingCommand;
 import lombok.extern.slf4j.Slf4j;
 
 import com.galagyy.alice.cmds.CommandHandler;
@@ -7,12 +9,21 @@ import com.galagyy.alice.cmds.CommandHandler;
 import com.galagyy.alice.util.FileManager;
 import com.galagyy.alice.util.InputManager;
 
+import com.galagyy.alice.service.ClickService;
+
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class App {
     private CommandHandler commandHandler;
+    private ClickService clickService;
+
+    private ScheduledExecutorService scheduler;
 
     private String token;
     private String prefix;
@@ -25,6 +36,7 @@ public class App {
     private void start(){
         setupConfigurations();
         setupJavacord();
+        loadCommands();
     }
 
     private void setupJavacord(){
@@ -64,5 +76,18 @@ public class App {
         fileManager.setValue("prefix", this.prefix);
 
         log.info("Retrieved token from user input.");
+    }
+
+    private void loadCommands(){
+        this.commandHandler.registerCommand("ping", new PingCommand());
+        this.commandHandler.registerCommand("click", new ClickCommand(this.clickService));
+        this.commandHandler.registerCommand("type", new PingCommand());
+    }
+
+    private void setupScheduledTasks(int poolSize){
+        this.clickService = new ClickService();
+        this.scheduler = Executors.newScheduledThreadPool(poolSize);
+
+        scheduler.scheduleAtFixedRate(() -> clickService.click(), 10, 15, TimeUnit.MINUTES);
     }
 }
