@@ -9,7 +9,7 @@ version = '1.0-SNAPSHOT'
 jar {
     manifest {
         attributes(
-                'Main-Class': 'com.galagyy.alice.App'
+                'Main-Class': 'com.galagyy.siggma.App'
         )
     }
 }
@@ -41,6 +41,6 @@ test {
 shadowJar {
     archiveClassifier.set('')
     manifest {
-        attributes 'Main-Class': 'com.galagyy.alice.App'
+        attributes 'Main-Class': 'com.galagyy.siggma.App'
     }
 }

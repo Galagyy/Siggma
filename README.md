@@ -1,13 +1,13 @@
-# Alice
+# Siggma
 > A Java-Discord remote control app.
 
-Alice is a simple Java-Discord remote control app that lets you control and automate a seperate computer while being away from the computer.
+Siggma is a simple Java-Discord remote control app that lets you control and automate a seperate computer while being away from the computer.
 
-Alice uses the [Discord API](https://discord.com/developers/docs/reference) and [Javacord](https://javacord.org/) to let users interact with the client PC from any other device that they are signed into.
+Siggma uses the [Discord API](https://discord.com/developers/docs/reference) and [Javacord](https://javacord.org/) to let users interact with the client PC from any other device that they are signed into.
 
 ## Features
-Alice currently features a variety of commands that include the following:
-- Configuration System: Alice features a configuration system that saves previous settings for new sessions, this is saved using Java serialization to prevent plain text tokens.
+Siggma currently features a variety of commands that include the following:
+- Configuration System: Siggma features a configuration system that saves previous settings for new sessions, this is saved using Java serialization to prevent plain text tokens.
 - Run Command: Run shell commands & get an output.
 - Click Command: Setup clicks at an interval & manually click the screen.
 - Keyboard Command: Send streams of keyboard inputs to control the host screen.
@@ -38,7 +38,6 @@ java -jar *.jar
 The following features are supposed to be added later:
 - Screenshot Command: Send screenshots at a regular interval & manually screenshot.
 - Webhook Logging: Log errors and other issues from SLF4J to a webhook for ease.
-- 
 
 ## Usage
 You are free to use this program as you like, I am not responsible for how you use this program. For more in depth information, refer to the **license.**
