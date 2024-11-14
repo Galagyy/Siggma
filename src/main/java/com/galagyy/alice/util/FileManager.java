@@ -20,14 +20,18 @@ public class FileManager {
         this.configLocation = configLocation;
         this.config = new HashMap<>();
 
-        loadConfiguration();
+        if(new File(configLocation).exists()){
+            loadConfiguration();
+        }
     }
 
     public FileManager(){
         this.configLocation = "./config.txt";
         this.config = new HashMap<>();
 
-        loadConfiguration();
+        if(new File(configLocation).exists()){
+            loadConfiguration();
+        }
     }
 
     public String getValue(String key){
@@ -41,7 +45,9 @@ public class FileManager {
     }
 
     public boolean configExists(){
-        return new File(this.configLocation).exists();
+        File configFile = new File(configLocation);
+
+        return configFile.exists();
     }
 
     private void loadConfiguration(){
@@ -52,7 +58,7 @@ public class FileManager {
 
             objectInputStream.close();
         } catch (Exception exception){
-            log.error(exception.getMessage());
+            log.warn(exception.getMessage());
         }
     }
 
@@ -64,7 +70,7 @@ public class FileManager {
             objectOutputStream.flush();
             objectOutputStream.close();
         } catch (Exception exception){
-            log.error(exception.getMessage());
+            log.warn(exception.getMessage());
         }
     }
 }
