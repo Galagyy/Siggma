@@ -1,9 +1,10 @@
-package com.galagyy.alice.cmds.action;
+package com.galagyy.siggma.cmds.action;
 
-import com.galagyy.alice.cmds.ICommand;
-
-import com.galagyy.alice.service.ClickService;
 import lombok.extern.slf4j.Slf4j;
+
+import com.galagyy.siggma.cmds.ICommand;
+
+import com.galagyy.siggma.service.ClickService;
 
 import org.javacord.api.event.message.MessageCreateEvent;
 

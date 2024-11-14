@@ -1,15 +1,19 @@
-package com.galagyy.alice;
+package com.galagyy.siggma;
 
-import com.galagyy.alice.cmds.action.ClickCommand;
-import com.galagyy.alice.cmds.info.PingCommand;
+import com.galagyy.siggma.cmds.action.ScreenshotCommand;
+import com.galagyy.siggma.cmds.util.RunCommand;
+import com.galagyy.siggma.service.ScreenshotService;
 import lombok.extern.slf4j.Slf4j;
 
-import com.galagyy.alice.cmds.CommandHandler;
+import com.galagyy.siggma.cmds.CommandHandler;
 
-import com.galagyy.alice.util.FileManager;
-import com.galagyy.alice.util.IOManager;
+import com.galagyy.siggma.util.FileManager;
+import com.galagyy.siggma.util.IOManager;
 
-import com.galagyy.alice.service.ClickService;
+import com.galagyy.siggma.cmds.action.ClickCommand;
+import com.galagyy.siggma.cmds.info.PingCommand;
+
+import com.galagyy.siggma.service.ClickService;
 
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
@@ -24,6 +28,7 @@ public class App {
 
     private CommandHandler commandHandler;
     private ClickService clickService;
+    private ScreenshotService screenshotService;
 
     private ScheduledExecutorService scheduler;
     private IOManager ioManager;
@@ -88,15 +93,20 @@ public class App {
     }
 
     private void loadCommands(){
+        this.clickService = new ClickService();
+        this.screenshotService = new ScreenshotService();
+
         this.commandHandler.registerCommand("ping", new PingCommand());
         this.commandHandler.registerCommand("click", new ClickCommand(this.clickService));
         this.commandHandler.registerCommand("type", new PingCommand());
+        this.commandHandler.registerCommand("run", new RunCommand());
+        this.commandHandler.registerCommand("ss", new ScreenshotCommand(this.screenshotService));
     }
 
     private void setupScheduledTasks(int poolSize){
-        this.clickService = new ClickService();
         this.scheduler = Executors.newScheduledThreadPool(poolSize);
 
         scheduler.scheduleAtFixedRate(() -> clickService.click(), 10, 15, TimeUnit.MINUTES);
+        scheduler.scheduleAtFixedRate(() -> screenshotService.takeScreenshot(), 10, 15, TimeUnit.MINUTES);
     }
 }

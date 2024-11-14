@@ -1,8 +1,8 @@
-package com.galagyy.alice.cmds.util;
-
-import com.galagyy.alice.cmds.ICommand;
+package com.galagyy.siggma.cmds.util;
 
 import lombok.extern.slf4j.Slf4j;
+
+import com.galagyy.siggma.cmds.ICommand;
 
 import org.javacord.api.event.message.MessageCreateEvent;
 

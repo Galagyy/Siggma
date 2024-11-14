@@ -1,6 +1,6 @@
-package com.galagyy.alice.cmds.info;
+package com.galagyy.siggma.cmds.info;
 
-import com.galagyy.alice.cmds.ICommand;
+import com.galagyy.siggma.cmds.ICommand;
 
 import org.javacord.api.event.message.MessageCreateEvent;
 

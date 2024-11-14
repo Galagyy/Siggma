@@ -1,9 +1,5 @@
-package com.galagyy.alice.cmds;
+package com.galagyy.siggma.cmds;
 
-import com.galagyy.alice.cmds.action.ClickCommand;
-import com.galagyy.alice.cmds.action.TypeCommand;
-import com.galagyy.alice.cmds.info.PingCommand;
-import com.galagyy.alice.cmds.util.RunCommand;
 import lombok.extern.slf4j.Slf4j;
 
 import org.javacord.api.event.message.MessageCreateEvent;
@@ -13,7 +9,7 @@ import java.util.Optional;
 
 @Slf4j
 public class CommandHandler {
-    private HashMap<String, ICommand> commands;
+    private final HashMap<String, ICommand> commands;
     private final String prefix;
 
     public CommandHandler(String prefix) {

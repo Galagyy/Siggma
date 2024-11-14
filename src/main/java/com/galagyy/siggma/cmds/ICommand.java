@@ -1,4 +1,4 @@
-package com.galagyy.alice.cmds;
+package com.galagyy.siggma.cmds;
 
 import org.javacord.api.event.message.MessageCreateEvent;
 

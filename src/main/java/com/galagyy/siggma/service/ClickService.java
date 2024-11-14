@@ -1,4 +1,4 @@
-package com.galagyy.alice.service;
+package com.galagyy.siggma.service;
 
 import lombok.Getter;
 import lombok.Setter;
