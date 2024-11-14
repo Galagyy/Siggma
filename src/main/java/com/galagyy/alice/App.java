@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import com.galagyy.alice.cmds.CommandHandler;
 
 import com.galagyy.alice.util.FileManager;
-import com.galagyy.alice.util.InputManager;
+import com.galagyy.alice.util.IOManager;
 
 import com.galagyy.alice.service.ClickService;
 
@@ -20,10 +20,13 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class App {
+    public static final String VERSION = "v1.0";
+
     private CommandHandler commandHandler;
     private ClickService clickService;
 
     private ScheduledExecutorService scheduler;
+    private IOManager ioManager;
 
     private String token;
     private String prefix;
@@ -34,9 +37,36 @@ public class App {
     }
 
     private void start(){
+        setupMenu();
         setupConfigurations();
         setupJavacord();
         loadCommands();
+        setupScheduledTasks(2);
+    }
+
+    private void setupMenu(){
+        this.ioManager = new IOManager();
+        this.ioManager.displayMenu();
+    }
+
+    private void setupConfigurations() {
+        FileManager fileManager = new FileManager();
+
+        if(fileManager.configExists()){
+            this.token = fileManager.getValue("token");
+            this.prefix = fileManager.getValue("prefix");
+            log.info("Retrieved token from config file.");
+
+            return;
+        }
+
+        this.token = ioManager.prompt("Please enter the token: ");
+        this.prefix = ioManager.prompt("Please enter the prefix: ");
+
+        fileManager.setValue("token", this.token);
+        fileManager.setValue("prefix", this.prefix);
+
+        log.info("Retrieved token from user input.");
     }
 
     private void setupJavacord(){
@@ -55,27 +85,6 @@ public class App {
             log.error(exception.getMessage());
             System.exit(1);
         }
-    }
-
-    private void setupConfigurations() {
-        FileManager fileManager = new FileManager();
-        InputManager inputManager = new InputManager();
-
-        if(fileManager.configExists()){
-            this.token = fileManager.getValue("token");
-            this.prefix = fileManager.getValue("prefix");
-            log.info("Retrieved token from config file.");
-
-            return;
-        }
-
-        this.token = inputManager.prompt("Please enter the token: ");
-        this.prefix = inputManager.prompt("Please enter the prefix: ");
-
-        fileManager.setValue("token", this.token);
-        fileManager.setValue("prefix", this.prefix);
-
-        log.info("Retrieved token from user input.");
     }
 
     private void loadCommands(){
